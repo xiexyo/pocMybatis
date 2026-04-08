@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bank.poc.mapper.CustomerMapper">
+
+    <insert id="insert" parameterType="CustomerEntity">
+        INSERT INTO t_customer (
+        customer_id,
+        customer_name,
+        cert_type,
+        cert_no,
+        mobile,
+        customer_status,
+        risk_level,
+        created_time,
+        updated_time
+        ) VALUES (
+        #{customerId},
+        #{customerName},
+        #{certType},
+        #{certNo},
+        #{mobile},
+        #{customerStatus},
+        #{riskLevel},
+        #{createdTime},
+        #{updatedTime}
+        )
+    </insert>
+
+    <select id="selectByCustomerId" resultType="CustomerEntity">
+        SELECT
+        customer_id,
+        customer_name,
+        cert_type,
+        cert_no,
+        mobile,
+        customer_status,
+        risk_level,
+        created_time,
+        updated_time
+        FROM t_customer
+        WHERE customer_id = #{customerId}
+    </select>
+
+    <select id="selectByCertNo" resultType="CustomerEntity">
+        SELECT
+        customer_id,
+        customer_name,
+        cert_type,
+        cert_no,
+        mobile,
+        customer_status,
+        risk_level,
+        created_time,
+        updated_time
+        FROM t_customer
+        WHERE cert_no = #{certNo}
+    </select>
+
+    <select id="countByCertNo" resultType="long">
+        SELECT COUNT(1)
+        FROM t_customer
+        WHERE cert_no = #{certNo}
+    </select>
+
+</mapper>

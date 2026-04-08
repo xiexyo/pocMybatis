@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bank.poc.mapper.AccountMapper">
+
+    <insert id="insert" parameterType="AccountEntity">
+        INSERT INTO t_account (
+        account_no,
+        customer_id,
+        account_name,
+        account_type,
+        product_code,
+        currency,
+        balance,
+        account_status,
+        branch_code,
+        open_date,
+        created_time,
+        updated_time
+        ) VALUES (
+        #{accountNo},
+        #{customerId},
+        #{accountName},
+        #{accountType},
+        #{productCode},
+        #{currency},
+        #{balance},
+        #{accountStatus},
+        #{branchCode},
+        #{openDate},
+        #{createdTime},
+        #{updatedTime}
+        )
+    </insert>
+
+    <select id="selectByAccountNo" resultType="AccountEntity">
+        SELECT
+        account_no,
+        customer_id,
+        account_name,
+        account_type,
+        product_code,
+        currency,
+        balance,
+        account_status,
+        branch_code,
+        open_date,
+        created_time,
+        updated_time
+        FROM t_account
+        WHERE account_no = #{accountNo}
+    </select>
+
+    <select id="selectByCustomerId" resultType="AccountEntity">
+        SELECT
+        account_no,
+        customer_id,
+        account_name,
+        account_type,
+        product_code,
+        currency,
+        balance,
+        account_status,
+        branch_code,
+        open_date,
+        created_time,
+        updated_time
+        FROM t_account
+        WHERE customer_id = #{customerId}
+        ORDER BY created_time DESC
+    </select>
+
+    <select id="selectByCustomerIdAndAccountType" resultType="AccountEntity">
+        SELECT
+        account_no,
+        customer_id,
+        account_name,
+        account_type,
+        product_code,
+        currency,
+        balance,
+        account_status,
+        branch_code,
+        open_date,
+        created_time,
+        updated_time
+        FROM t_account
+        WHERE customer_id = #{customerId}
+        AND account_type = #{accountType}
+        ORDER BY created_time DESC
+    </select>
+
+    <select id="selectByCustomerIdAndAccountStatus" resultType="AccountEntity">
+        SELECT
+        account_no,
+        customer_id,
+        account_name,
+        account_type,
+        product_code,
+        currency,
+        balance,
+        account_status,
+        branch_code,
+        open_date,
+        created_time,
+        updated_time
+        FROM t_account
+        WHERE customer_id = #{customerId}
+        AND account_status = #{accountStatus}
+        ORDER BY created_time DESC
+    </select>
+
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bank.poc.mapper.IdempotentRecordMapper">
+
+    <insert id="insert" parameterType="IdempotentRecordEntity">
+        INSERT INTO t_idempotent_record (
+        request_id,
+        business_type,
+        business_key,
+        process_status,
+        response_code,
+        response_message,
+        created_time,
+        updated_time
+        ) VALUES (
+        #{requestId},
+        #{businessType},
+        #{businessKey},
+        #{processStatus},
+        #{responseCode},
+        #{responseMessage},
+        #{createdTime},
+        #{updatedTime}
+        )
+    </insert>
+
+    <select id="selectByRequestId" resultType="IdempotentRecordEntity">
+        SELECT
+        request_id,
+        business_type,
+        business_key,
+        process_status,
+        response_code,
+        response_message,
+        created_time,
+        updated_time
+        FROM t_idempotent_record
+        WHERE request_id = #{requestId}
+    </select>
+
+    <select id="selectByBusinessType" resultType="IdempotentRecordEntity">
+        SELECT
+        request_id,
+        business_type,
+        business_key,
+        process_status,
+        response_code,
+        response_message,
+        created_time,
+        updated_time
+        FROM t_idempotent_record
+        WHERE business_type = #{businessType}
+        ORDER BY created_time DESC
+    </select>
+
+</mapper>
