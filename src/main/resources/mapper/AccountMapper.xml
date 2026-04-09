@@ -111,4 +111,14 @@
         ORDER BY created_time DESC
     </select>
 
+    <select id="countActiveClassOneAccountByCustomerId" resultType="long">
+        SELECT COUNT(1)
+        FROM t_account a
+        INNER JOIN t_product p
+        ON a.product_code = p.product_code
+        WHERE a.customer_id = #{customerId}
+        AND a.account_status = 'ACTIVE'
+        AND p.account_level = 'CLASS_I'
+    </select>
+
 </mapper>

@@ -18,4 +18,6 @@ public interface AccountMapper {
 
     List<AccountEntity> selectByCustomerIdAndAccountStatus(@Param("customerId") String customerId,
                                                            @Param("accountStatus") String accountStatus);
+
+    long countActiveClassOneAccountByCustomerId(@Param("customerId") String customerId);
 }

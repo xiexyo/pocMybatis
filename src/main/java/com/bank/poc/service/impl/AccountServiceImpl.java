@@ -7,9 +7,9 @@ import com.bank.poc.dto.response.OpenAccountResponse;
 import com.bank.poc.entity.AccountEntity;
 import com.bank.poc.entity.CustomerEntity;
 import com.bank.poc.entity.ProductEntity;
-import com.bank.poc.mapper.AccountMapper;
-import com.bank.poc.mapper.CustomerMapper;
-import com.bank.poc.mapper.ProductMapper;
+import com.bank.poc.repository.AccountRepository;
+import com.bank.poc.repository.CustomerRepository;
+import com.bank.poc.repository.ProductRepository;
 import com.bank.poc.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,26 +18,25 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
-    private final AccountMapper accountMapper;
-    private final CustomerMapper customerMapper;
-    private final ProductMapper productMapper;
+    private final AccountRepository accountRepository;
+    private final CustomerRepository customerRepository;
+    private final ProductRepository productRepository;
 
     @Override
     @Transactional
     public OpenAccountResponse openAccount(OpenAccountRequest request) {
-        CustomerEntity customer = customerMapper.selectByCustomerId(request.getCustomerId());
+        CustomerEntity customer = customerRepository.findByCustomerId(request.getCustomerId());
         if (customer == null) {
             throw new BizException("CUST404", "客户不存在");
         }
 
-        ProductEntity product = productMapper.selectByProductCode(request.getProductCode());
+        ProductEntity product = productRepository.findByProductCode(request.getProductCode());
         if (product == null) {
             throw new BizException("PROD404", "产品不存在");
         }
@@ -46,8 +45,9 @@ public class AccountServiceImpl implements AccountService {
             throw new BizException("PROD001", "产品当前不可售");
         }
 
-        if ("CLASS_I".equals(product.getAccountLevel())) {
-            checkClassOneAccountLimit(customer.getCustomerId());
+        if ("CLASS_I".equals(product.getAccountLevel())
+                && accountRepository.existsActiveClassOneAccount(customer.getCustomerId())) {
+            throw new BizException("ACCT001", "该客户已存在一类户，不能重复开立");
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -68,7 +68,7 @@ public class AccountServiceImpl implements AccountService {
                 .updatedTime(now)
                 .build();
 
-        accountMapper.insert(entity);
+        accountRepository.save(entity);
 
         return OpenAccountResponse.builder()
                 .accountNo(entity.getAccountNo())
@@ -86,17 +86,17 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDetailResponse getAccountDetail(String accountNo) {
-        AccountEntity account = accountMapper.selectByAccountNo(accountNo);
+        AccountEntity account = accountRepository.findByAccountNo(accountNo);
         if (account == null) {
             throw new BizException("ACCT404", "账户不存在");
         }
 
-        CustomerEntity customer = customerMapper.selectByCustomerId(account.getCustomerId());
+        CustomerEntity customer = customerRepository.findByCustomerId(account.getCustomerId());
         if (customer == null) {
             throw new BizException("CUST404", "账户对应客户不存在");
         }
 
-        ProductEntity product = productMapper.selectByProductCode(account.getProductCode());
+        ProductEntity product = productRepository.findByProductCode(account.getProductCode());
         if (product == null) {
             throw new BizException("PROD404", "账户对应产品不存在");
         }
@@ -117,18 +117,6 @@ public class AccountServiceImpl implements AccountService {
                 .createdTime(account.getCreatedTime())
                 .updatedTime(account.getUpdatedTime())
                 .build();
-    }
-
-    private void checkClassOneAccountLimit(String customerId) {
-        List<AccountEntity> accountList = accountMapper.selectByCustomerId(customerId);
-        for (AccountEntity account : accountList) {
-            ProductEntity openedProduct = productMapper.selectByProductCode(account.getProductCode());
-            if (openedProduct != null
-                    && "CLASS_I".equals(openedProduct.getAccountLevel())
-                    && "ACTIVE".equals(account.getAccountStatus())) {
-                throw new BizException("ACCT001", "该客户已存在一类户，不能重复开立");
-            }
-        }
     }
 
     private String generateAccountNo() {
