@@ -556,7 +556,7 @@ throw new BizException("业务码", "错误描述");
 
 当前工程已经非常适合作为 AI 插件的持续开发上下文，推荐后续继续实现：
 
-### 17.1 入金接口
+### 17.1 存入接口
 目标：
 - 更新账户余额
 - 写入交易流水
@@ -574,7 +574,7 @@ throw new BizException("业务码", "错误描述");
 ### 17.4 幂等控制
 目标：
 - 引入 `t_idempotent_record`
-- 避免重复开户、重复入金、重复转账
+- 避免重复开户、重复存入、重复转账
 
 ### 17.5 账户冻结 / 解冻
 目标：
@@ -602,9 +602,9 @@ throw new BizException("业务码", "错误描述");
 ## 19. 推荐给 AI 插件的任务模板
 
 ### 模板一：新增接口
-> 请基于当前工程新增“账户入金接口”，要求：  
+> 请基于当前工程新增“账户存入接口”，要求：  
 > 1）新增请求 DTO 和响应 DTO  
-> 2）在 AccountService 或 TransactionService 中新增入金方法  
+> 2）在 AccountService 或 TransactionService 中新增存入方法  
 > 3）更新账户余额  
 > 4）写入 t_transaction 流水  
 > 5）新增 Controller 对外接口  
@@ -623,7 +623,7 @@ throw new BizException("业务码", "错误描述");
 
 建议开发顺序：
 
-1. 入金接口
+1. 存入接口
 2. 转账接口
 3. 交易查询接口
 4. 幂等控制
