@@ -40,3 +40,4 @@ logging:
     root: info
     org.springframework.jdbc.datasource.init: info
     com.bank.poc.mapper: debug
+    com.bank.poc: debug
