@@ -4,7 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bank.poc.mapper.AccountMapper">
 
-    <insert id="insert" parameterType="AccountEntity">
+    <insert id="insert" parameterType="com.bank.poc.entity.AccountEntity">
         INSERT INTO t_account (
         account_no,
         customer_id,
@@ -34,7 +34,7 @@
         )
     </insert>
 
-    <select id="selectByAccountNo" resultType="AccountEntity">
+    <select id="selectByAccountNo" resultType="com.bank.poc.entity.AccountEntity">
         SELECT
         account_no,
         customer_id,
@@ -52,7 +52,7 @@
         WHERE account_no = #{accountNo}
     </select>
 
-    <select id="selectByCustomerId" resultType="AccountEntity">
+    <select id="selectByCustomerId" resultType="com.bank.poc.entity.AccountEntity">
         SELECT
         account_no,
         customer_id,
@@ -71,7 +71,7 @@
         ORDER BY created_time DESC
     </select>
 
-    <select id="selectByCustomerIdAndAccountType" resultType="AccountEntity">
+    <select id="selectByCustomerIdAndAccountType" resultType="com.bank.poc.entity.AccountEntity">
         SELECT
         account_no,
         customer_id,
@@ -91,7 +91,7 @@
         ORDER BY created_time DESC
     </select>
 
-    <select id="selectByCustomerIdAndAccountStatus" resultType="AccountEntity">
+    <select id="selectByCustomerIdAndAccountStatus" resultType="com.bank.poc.entity.AccountEntity">
         SELECT
         account_no,
         customer_id,

@@ -4,7 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bank.poc.mapper.TransactionMapper">
 
-    <insert id="insert" parameterType="TransactionEntity">
+    <insert id="insert" parameterType="com.bank.poc.entity.TransactionEntity">
         INSERT INTO t_transaction (
         txn_id,
         request_id,
@@ -30,7 +30,7 @@
         )
     </insert>
 
-    <select id="selectByTxnId" resultType="TransactionEntity">
+    <select id="selectByTxnId" resultType="com.bank.poc.entity.TransactionEntity">
         SELECT
         txn_id,
         request_id,
@@ -46,7 +46,7 @@
         WHERE txn_id = #{txnId}
     </select>
 
-    <select id="selectByRequestId" resultType="TransactionEntity">
+    <select id="selectByRequestId" resultType="com.bank.poc.entity.TransactionEntity">
         SELECT
         txn_id,
         request_id,
@@ -62,7 +62,7 @@
         WHERE request_id = #{requestId}
     </select>
 
-    <select id="selectByAccountNo" resultType="TransactionEntity">
+    <select id="selectByAccountNo" resultType="com.bank.poc.entity.TransactionEntity">
         SELECT
         txn_id,
         request_id,
@@ -80,7 +80,7 @@
         ORDER BY txn_time DESC
     </select>
 
-    <select id="selectByTxnTimeBetween" resultType="TransactionEntity">
+    <select id="selectByTxnTimeBetween" resultType="com.bank.poc.entity.TransactionEntity">
         SELECT
         txn_id,
         request_id,
